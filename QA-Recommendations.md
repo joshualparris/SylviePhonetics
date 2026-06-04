@@ -53,3 +53,24 @@ This document records the QA audit findings for SylviePhonetics and the recommen
 - [ ] Add movement/breathing breaks
 - [ ] Separate sound tasks from letter tasks
 - [ ] Add visible parent prompts
+
+## Appendix: Audit & Research Excerpts
+### QA Audit for Child Apps (relevant SylviePhonetics findings)
+- SylviePhonetics is engaging and covers multiple phonological tasks, but inconsistent feedback and occasional silent errors limit educational value and risk frustration.
+- Strengths: variety of games, large tap targets, parent assist mode, calm audio feedback, and rough phonics progression from syllables to phoneme identification.
+- Missing supports: no clear session timer or closing ritual; wrong answers produce generic “no” or silence without scaffolded hints; no movement or breathing breaks; no co-regulation prompts inside activities.
+- Developmental gap: many tasks rely on letter guessing instead of sound processing; mixing letters and pictures in early tasks can blur phonological awareness vs letter recognition.
+- Recommendations excerpt: add three-step scaffolded feedback; introduce session timers with natural closing rituals; insert brief movement or breathing breaks; separate phonological tasks from grapheme tasks; add parent co-play prompts within games.
+
+### SylvieElias_AppDesign_Research (relevant SylviePhonetics findings)
+- Phonics sequence: begin with rhyme recognition, syllable segmentation, onset-rime, phoneme isolation, phoneme blending, then grapheme-phoneme correspondence.
+- Design principles: sequence matters; use the child’s own name as an anchor; decodable words only in early stages; audio-first modelling before graphemes; scaffolded feedback if wrong — hint, model, never just show an X.
+- Four Pillars of Learning: Active Involvement, Contingent Feedback, Meaningful Experiences, Social Interaction.
+- Session length: 4-year-olds should target 8–12 minute structured sessions, with a natural closing ritual; multiple short sessions outperform one long session.
+- Reward guidance: use informational praise, avoid variable-ratio reward schedules, choose narrative completion over points, and never shame mistakes.
+
+### Evidence-based guidance for SylviePhonetics
+- Keep early phonics tasks audio-first and separate phonological awareness from grapheme teaching until the child shows mastery.
+- Provide immediate contingent feedback and model the target phoneme without adding a schwa.
+- Include visible parent prompts and co-play invitations on launch and within game screens.
+- Use a calm voice and support optional audio/caption modes for accessibility.
