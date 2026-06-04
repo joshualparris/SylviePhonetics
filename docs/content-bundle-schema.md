@@ -1,38 +1,52 @@
-# Optional content bundle (`content/bundle.json`)
+# Optional Content Bundle (`content/bundle.json`)
 
-The app optionally fetches `./content/bundle.json` **after initial load**. If missing (e.g. `file://`) or invalid, bundled words are used unchanged.
+The app optionally fetches `./content/bundle.json` after initial load. If the file is missing, unavailable from `file://`, or invalid, bundled words are used unchanged.
 
-## Root shape
+## Root Shape
 
 | Field | Type | Required |
 |-------|------|----------|
 | `phonicWords` | array | yes |
 
-Other keys are ignored today but may extend later (`letterLab`, …).
+Other keys are ignored today but may be used later.
 
-## `phonicWords[]` entries
+## `phonicWords[]` Entries
 
-Each object MUST include:
+Each object must include:
 
-- `word` (string): lower-case target word (`"sun"`).
-- `letters` (string[]): graphemes mapped to pronunciation for simple CVC work (`["s","u","n"]`).
+- `word` (string): lowercase target word, such as `"sun"`.
+- `letters` (string array): graphemes mapped to pronunciation for simple CVC work, such as `["s", "u", "n"]`.
 
-Recommended:
+Recommended fields:
 
 - `emoji` (string): display glyph.
 - `promptWord` (string): optional speech/display variant.
-- `difficulty` (number): 1–18; filters by literacy age picker.
+- `difficulty` (number): 1-18; filters by literacy age picker.
 
 Example:
 
 ```json
 {
   "phonicWords": [
-    { "word": "sun", "emoji": "☀️", "letters": ["s", "u", "n"], "promptWord": "sun", "difficulty": 1 }
+    {
+      "word": "sun",
+      "emoji": "sun",
+      "letters": ["s", "u", "n"],
+      "promptWord": "sun",
+      "difficulty": 1
+    }
   ]
 }
 ```
 
-## Cultural safety
+## Validation
 
-Treat every added row like curriculum content: culturally appropriate review by humans—not bulk LLM-fill. Respect Aboriginal and Torres Strait Islander perspectives; seek community guidance before publishing themed assets.
+Validate before publishing:
+
+```bash
+node scripts/validate-content.mjs content/bundle.json
+```
+
+## Cultural Safety
+
+Treat every added row like curriculum content. Use culturally appropriate human review, not bulk LLM-fill. Respect Aboriginal and Torres Strait Islander perspectives and seek community guidance before publishing themed assets or language.

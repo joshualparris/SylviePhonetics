@@ -1886,8 +1886,8 @@
           </div>
 
           <div class="stat-grid">
-            <div class="stat"><strong id="starsStat">0</strong><span>garden stars</span></div>
-            <div class="stat"><strong id="streakStat">0</strong><span>best streak</span></div>
+            <div class="stat"><strong id="starsStat">0</strong><span>sound flowers</span></div>
+            <div class="stat"><strong id="streakStat">0</strong><span>best listening run</span></div>
             <div class="stat"><strong id="roundsStat">0</strong><span>rounds played</span></div>
           </div>
           <div class="panel" style="margin-top:16px;">
@@ -1964,6 +1964,8 @@
         <h2>Parent coach</h2>
         <p>The app teaches through play. This screen keeps the explicit teaching sequence clear.</p>
         <div class="coach-sections">
+          <div class="coach-section"><strong>Research sequence</strong><span>Start with rhyme and syllable play, then first/middle/last sounds, then sound boxes and blending, then letter links and tiny decodable reading.</span></div>
+          <div class="coach-section"><strong>Scaffold misses</strong><span>Hint first, model second, retry once, then move on gently. The goal is sound investigation, not testing.</span></div>
           <div class="coach-section"><strong>Best teaching order</strong><span>Oral sound play first, then letter-sound links, then CVC blending and spelling, then tiny decodable reading, and only later digraphs and trickier patterns.</span></div>
           <div class="coach-section"><strong>Gifted-child adjustment</strong><span>Move faster after real mastery, but do not increase emotional load. Stretch with patterns, invention, and noticing, not with heaps of harder words.</span></div>
           <div class="coach-section"><strong>Clean sound language</strong><span>Say “This letter can show /m/” rather than “M says muh”. Keep phonemes clipped, especially for stop sounds.</span></div>
@@ -2139,6 +2141,18 @@
       const list = COACH_SNIPPETS[tag];
       if (!list || !list.length) return '';
       return list[Math.floor(Math.random() * list.length)];
+    }
+
+    const SOUND_BRIDGE_PROMPTS = [
+      'Now find one thing nearby that starts with your favourite sound.',
+      'Clap the beats in Sylvie, then clap the beats in one toy name.',
+      'Say two silly rhyming words together before the tablet rests.',
+      'Build one word with blocks or magnetic letters if you have them nearby.',
+      'Tell a grown-up which sound felt easiest today.'
+    ];
+
+    function soundBridgePrompt() {
+      return SOUND_BRIDGE_PROMPTS[state.sessionRounds % SOUND_BRIDGE_PROMPTS.length];
     }
 
     function letterSound(grapheme) {
@@ -2412,6 +2426,7 @@
       currentPromptData: null,
       microBreaks: 'off',
       sinceMicroBreak: 0,
+      sessionStartedAt: null,
       earlyYearsRegion: 'generic',
       largeTouch: false,
       speechRatePct: 100,
@@ -2668,6 +2683,22 @@
     function updateSessionBanner() {
       const banner = document.getElementById('sessionBanner');
       if (!banner) return;
+      const elapsedMin = state.sessionStartedAt ? Math.floor((Date.now() - state.sessionStartedAt) / 60000) : 0;
+      if (elapsedMin >= 15) {
+        banner.textContent = 'Finish cue: 15 minutes is enough. End on this win and find a real-world sound.';
+        banner.classList.add('show');
+        return;
+      }
+      if (elapsedMin >= 12) {
+        banner.textContent = 'Soft stop: aim to finish soon while it still feels happy.';
+        banner.classList.add('show');
+        return;
+      }
+      if (elapsedMin >= 8) {
+        banner.textContent = 'Time cue: one or two more good turns, then bridge back to real life.';
+        banner.classList.add('show');
+        return;
+      }
       if (state.sessionRounds >= 12) {
         banner.textContent = 'Break cue: this session has enough practice. Finish on a win and come back later.';
         banner.classList.add('show');
@@ -2839,6 +2870,7 @@
       state.currentGame = gameId;
       state.roundIndex = 0;
       state.sinceMicroBreak = 0;
+      state.sessionStartedAt = Date.now();
       state.sessionLog = [];
       state.consecutiveMisses = 0;
       state.buildAnswer = [];
@@ -2906,6 +2938,7 @@
       state.currentGame = 'daily';
       state.roundIndex = 0;
       state.sinceMicroBreak = 0;
+      state.sessionStartedAt = Date.now();
       state.sessionLog = [];
       state.consecutiveMisses = 0;
       state.dailyNeedsCoplay = true;
@@ -2920,15 +2953,16 @@
       state.speechResult = '';
       state.currentPromptData = null;
       state.rounds = [
-        { type: 'letters', item: pick(LETTER_LAB, 1)[0] },
-        { type: 'start', item: words[0] },
-        { type: 'trace', item: pick(LETTER_LAB, 1)[0] },
-        { type: 'phonemeBoxes', item: phItem },
+        { type: 'rhyme', item: pick(RHYME_ROUNDS, 1)[0] },
+        { type: 'clap', item: words[0] },
         { type: 'listen', item: words[1] },
+        { type: 'start', item: words[1] },
+        { type: 'phonemeBoxes', item: phItem },
+        { type: 'letters', item: pick(LETTER_LAB, 1)[0] },
+        { type: 'trace', item: pick(LETTER_LAB, 1)[0] },
         { type: 'vowel', item: words[2] },
         { type: 'patterns', item: pick(filterByDifficulty(PATTERN_ROUNDS), 1)[0] },
         { type: 'build', item: words[2] },
-        { type: 'rhyme', item: pick(RHYME_ROUNDS, 1)[0] },
         { type: 'story', item: pick(STORY_ROUNDS, 1)[0] },
         { type: 'read', item: pick(TINY_SENTENCES, 1)[0] }
       ];
@@ -3007,6 +3041,16 @@
       if (!panel) return;
       panel.textContent = message;
       panel.className = `feedback ${kind || ''}`;
+    }
+
+    function scaffoldMiss({ hint, model, retry, speakText }) {
+      const pieces = [hint, model, retry].filter(Boolean);
+      setFeedback(pieces.join(' '), 'bad');
+      if (speakText) speakLesson(speakText, { robot: false });
+      if (state.adultMode === 'coach') {
+        const node = document.getElementById('microScript');
+        if (node) node.textContent = `${pickCoachSnippet('retry')} ${node.textContent}`;
+      }
     }
 
     function setCoachLine(text) {
@@ -3139,12 +3183,14 @@
       updateProgressBar(gameMeta(state.currentGame).title);
       document.getElementById('progressFill').style.width = '100%';
       const recap = formatSessionRecap();
+      const bridge = soundBridgePrompt();
       document.getElementById('playArea').innerHTML = `
         <div class="scene">
           <div class="scene-art"><div class="emoji">${state.avatar}</div></div>
           <div class="scene-word">You did it!</div>
           <div class="question">That was enough for one happy little lesson.</div>
           <div class="feedback good">Celebrate, have a cuddle, and stop while it still feels easy.</div>
+          <div class="feedback info">Bridge back to real life: ${bridge}</div>
           <div class="win-recap" id="sessionRecapPrint">
             <strong>Session recap (grown-ups)</strong>
             <pre id="sessionRecapBody"></pre>
@@ -3607,8 +3653,13 @@
           nextRound(900);
         } else {
           button.classList.add('wrong');
-          setFeedback(`Try clapping ${item.word} again.`, 'bad');
           recordResult(false);
+          scaffoldMiss({
+            hint: `Clap ${item.word} slowly with your hands.`,
+            model: `${item.word} has ${item.beats} clap${item.beats === 1 ? '' : 's'}.`,
+            retry: 'Try one more clap together.',
+            speakText: `${item.word}. Clap the word parts.`
+          });
         }
       });
     }
@@ -3656,9 +3707,13 @@
           nextRound(950);
         } else {
           button.classList.add('wrong');
-          setFeedback(`Try again. Listen: ${item.word}.`, 'bad');
           recordResult(false);
-          speak(item.word);
+          scaffoldMiss({
+            hint: `Listen again: ${item.word}.`,
+            model: `I hear /${correct}/ first.`,
+            retry: 'Try one more, then we will move on.',
+            speakText: `${item.word}. First sound ${correct}.`
+          });
         }
       });
 
@@ -3718,9 +3773,13 @@
           nextRound(1000);
         } else {
           button.classList.add('wrong');
-          setFeedback(`Not that one. Say ${item.word} slowly.`, 'bad');
           recordResult(false);
-          speak(item.word);
+          scaffoldMiss({
+            hint: `Say ${item.word} slowly and listen for the ${position} sound.`,
+            model: `I hear /${answer}/ in the ${position}.`,
+            retry: 'Try one more sound choice.',
+            speakText: `${item.word}. ${answer}.`
+          });
         }
       });
     }
@@ -3761,8 +3820,13 @@
           nextRound(950);
         } else {
           button.classList.add('wrong');
-          setFeedback(`Try again. Listen to the middle of ${item.word}.`, 'bad');
           recordResult(false);
+          scaffoldMiss({
+            hint: `Stretch the middle of ${item.word}.`,
+            model: `I hear /${answer}/ in the middle.`,
+            retry: 'Try one more vowel choice.',
+            speakText: `${item.word}. Middle sound ${answer}.`
+          });
         }
       });
     }
@@ -3921,8 +3985,13 @@
           nextRound(1000);
         } else {
           button.classList.add('wrong');
-          setFeedback(`Try again. Listen to the ending of ${item.word}.`, 'bad');
           recordResult(false);
+          scaffoldMiss({
+            hint: `Listen to the ending of ${item.word}.`,
+            model: `${item.word} and ${item.answer} both end with ${item.family}.`,
+            retry: 'Try one more rhyme.',
+            speakText: `${item.word}. ${item.answer}. They rhyme.`
+          });
         }
       });
     }

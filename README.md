@@ -1,14 +1,41 @@
 # Sylvie Phonics Adventure
 
-A calm, offline-first phonics and early literacy practice app for home co-play and educator-informed practice.
+Sylvie Phonics Adventure is a calm, offline-first phonics and early literacy practice app for home co-play and educator-informed practice. It is a static single-page app that can run from `index.html` without a build step.
 
-## What this is
+Repository: https://github.com/joshualparris/SylviePhonetics.git
 
-This is a static web app. It can run from a single `index.html` file and can be deployed on GitHub Pages, Vercel, Netlify, or any static host.
+## Current State
 
-## Quick start
+The app is a feature-rich static phonics suite with touch and keyboard modes, parent assist mode, child play mode, speech synthesis, local progress, accessibility controls, EYLF-informed curriculum mapping, optional content bundles, and session recap tools.
 
-Open `index.html` in a browser, or serve the folder locally:
+See:
+
+- [Status](docs/status.md)
+- [Roadmap](docs/roadmap.md)
+- [Content and Safety](docs/content-and-safety.md)
+- [Development](docs/development.md)
+- [EYLF Curriculum Feature Map](docs/eylf-curriculum-feature-map.md)
+- [EYLF Implementation Tasks](docs/eylf-implementation-tasks.md)
+- [Optional Content Bundle Schema](docs/content-bundle-schema.md)
+
+## Feature Summary
+
+- 28 game modes plus Today's Path.
+- Touch mode and keyboard mode.
+- Sylvie play mode and Parent assist mode.
+- Gentle/growing/brave garden levels.
+- Literacy age selector.
+- Uppercase/lowercase display settings.
+- Speech speed controls and robot voice blending support.
+- Large touch, focus, high contrast, and dark mode controls.
+- Micro-break settings.
+- Early-years region/programme label picker.
+- Local-only session recap with copy and print.
+- Optional `content/bundle.json` loading.
+
+## Run Locally
+
+Open `index.html` directly in a browser, or serve the folder locally:
 
 ```bash
 python -m http.server 8000
@@ -20,31 +47,20 @@ Then open:
 http://localhost:8000
 ```
 
-## Deploy to GitHub Pages
+## Deploy
 
-1. Create a new GitHub repository.
-2. Upload these files to the repository root.
-3. Go to **Settings → Pages**.
-4. Set source to **Deploy from a branch**.
-5. Choose `main` and `/root`.
-6. Save.
+This is a static app. GitHub Pages, Vercel, Netlify, or any static host can serve the project root.
 
-Your app should appear at:
+Vercel settings:
 
-```text
-https://YOUR-GITHUB-USERNAME.github.io/YOUR-REPO-NAME/
-```
+- Framework preset: Other or Static.
+- Build command: leave blank.
+- Output directory: leave blank or root.
 
-## Deploy to Vercel
+## Safety Model
 
-1. Import the GitHub repo into Vercel.
-2. Framework preset: **Other** or **Static**.
-3. Build command: leave blank.
-4. Output directory: leave blank / root.
-5. Deploy.
-
-## Notes
-
-- This app stores progress locally in the browser.
-- It does not upload child data to a server.
+- Progress is stored locally in the browser.
+- Child data is not uploaded to a server.
+- Speech uses the device/browser speech synthesis.
 - Curriculum references are EYLF-informed and NSW transition-aware, not official certification.
+- Culturally specific content requires appropriate human review before publication.
