@@ -22,6 +22,12 @@ Validate an optional content bundle:
 node scripts/validate-content.mjs content/bundle.json
 ```
 
+Run the static release smoke check:
+
+```bash
+node scripts/smoke-check.mjs
+```
+
 ## Main Files
 
 - `index.html`: complete app bundle.
