@@ -9,3 +9,6 @@ Thumbs.db
 dist/
 build/
 coverage/
+playwright-report/
+test-results/
+.last-run.json

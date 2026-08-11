@@ -2042,20 +2042,27 @@
   </div>
 
   <div class="overlay" id="overlay"></div>
+  <div class="overlay micro-break-overlay" id="breathingOverlay" style="display: none; z-index: 10000; font-size: 2rem; flex-direction: column; color: var(--forest); background: rgba(255, 255, 255, 0.95);">
+    <div style="font-size: 4rem; animation: bob 3s ease-in-out infinite;">🌬️</div>
+    <div style="margin-top: 20px; font-weight: bold;">Take a deep breath...</div>
+  </div>
 
   <script>
     const APP_STORAGE_KEY = 'sylvie-phonics-adventure-v1';
     const GAMES = [
+      { id: 'clap', icon: '👏', title: 'Clap Syllables', blurb: 'Hear and clap word parts before reading.', eylfOutcomes: [5] },
+      { id: 'rhyme', icon: '🎵', title: 'Rhyme Time', blurb: 'Hear words that end with the same sound pattern.', eylfOutcomes: [4, 5] },
+      { id: 'rhymePairs', icon: '🎶', title: 'Rhyme Pairs', blurb: 'Tap the word that rhymes with the prompt.', eylfOutcomes: [4, 5] },
+      { id: 'listen', icon: '👂', title: 'Sound Safari', blurb: 'Hear first, middle, or last sounds in tiny words.', eylfOutcomes: [4, 5] },
       { id: 'start', icon: '🌞', title: 'First Sound Garden', blurb: 'Tap the letter that matches the beginning sound.', eylfOutcomes: [4, 5] },
+      { id: 'vowel', icon: '🌈', title: 'Vowel Garden', blurb: 'Find the middle vowel sound in short words.', eylfOutcomes: [5] },
       { id: 'letters', icon: '🔤', title: 'Letter Lab', blurb: 'Match letters to sounds and picture clues.', eylfOutcomes: [5] },
+      { id: 'build', icon: '🧩', title: 'Build and Blend', blurb: 'Touch letters in order to spell short words.', eylfOutcomes: [4, 5] },
+      { id: 'phonemeBoxes', icon: '⬜', title: 'Sound Boxes', blurb: 'Tap one sound chip for each sound you hear in order.', eylfOutcomes: [5] },
+      { id: 'blocks', icon: '🟦', title: 'Sound Blocks', blurb: 'Build words with letter blocks and listen closely.', eylfOutcomes: [4, 5] },
       { id: 'trace', icon: '✏️', title: 'Trace Letters', blurb: 'Draw big letters with a finger, mouse, or trackpad.', eylfOutcomes: [3, 4, 5] },
       { id: 'memory', icon: '🧠', title: 'Memory Match', blurb: 'Match letter cards with picture clue cards.', eylfOutcomes: [4, 5] },
-      { id: 'clap', icon: '👏', title: 'Clap Syllables', blurb: 'Hear and clap word parts before reading.', eylfOutcomes: [5] },
-      { id: 'listen', icon: '👂', title: 'Sound Safari', blurb: 'Hear first, middle, or last sounds in tiny words.', eylfOutcomes: [4, 5] },
-      { id: 'vowel', icon: '🌈', title: 'Vowel Garden', blurb: 'Find the middle vowel sound in short words.', eylfOutcomes: [5] },
-      { id: 'build', icon: '🧩', title: 'Build and Blend', blurb: 'Touch letters in order to spell short words.', eylfOutcomes: [4, 5] },
       { id: 'spell', icon: '🎤', title: 'Say and Spell', blurb: 'Spell with your voice if the browser microphone is ready.', eylfOutcomes: [4, 5] },
-      { id: 'rhyme', icon: '🎵', title: 'Rhyme Time', blurb: 'Hear words that end with the same sound pattern.', eylfOutcomes: [4, 5] },
       { id: 'digraph', icon: '🤫', title: 'Digraph Peek', blurb: 'Gently notice sh, ch, and th sound teams.', eylfOutcomes: [5] },
       { id: 'swap', icon: '🔁', title: 'Sound Swap Detective', blurb: 'Notice what changed from one word to the next.', eylfOutcomes: [4, 5] },
       { id: 'g', icon: '🦒', title: 'Tricky G Detective', blurb: 'Notice goat-g and giraffe-g without making it a test.', eylfOutcomes: [4, 5] },
@@ -2064,12 +2071,9 @@
       { id: 'video', icon: '🎬', title: 'Watch and Learn', blurb: 'See short, sound-rich clips and stay curious.', eylfOutcomes: [3, 5] },
       { id: 'spy', icon: '🔍', title: 'I Spy Sound', blurb: 'Spot the object that starts with the sound.', eylfOutcomes: [4, 5] },
       { id: 'hunt', icon: '🕵️', title: 'Sound Hunt', blurb: 'Find the matching sound among the pictures.', eylfOutcomes: [4, 5] },
-      { id: 'blocks', icon: '🟦', title: 'Sound Blocks', blurb: 'Build words with letter blocks and listen closely.', eylfOutcomes: [4, 5] },
-      { id: 'rhymePairs', icon: '🎶', title: 'Rhyme Pairs', blurb: 'Tap the word that rhymes with the prompt.', eylfOutcomes: [4, 5] },
       { id: 'song', icon: '🎤', title: 'Sound Song', blurb: 'Sing words and hear the sounds in a rhyme.', eylfOutcomes: [3, 5] },
       { id: 'jump', icon: '🦘', title: 'Sound Jump', blurb: 'Hop to the tile with the right starting sound.', eylfOutcomes: [3, 4, 5] },
       { id: 'count', icon: '🔢', title: 'Word Counters', blurb: 'Count letters in words with bright visuals.', eylfOutcomes: [4, 5] },
-      { id: 'phonemeBoxes', icon: '⬜', title: 'Sound Boxes', blurb: 'Tap one sound chip for each sound you hear in order.', eylfOutcomes: [5] },
       { id: 'patterns', icon: '🔶', title: 'Pattern Peek', blurb: 'What comes next? Early pattern talk for little brains.', eylfOutcomes: [4, 5] },
       { id: 'sort', icon: '🔀', title: 'Sort and Snap', blurb: 'Snap each picture into the group that fits best.', eylfOutcomes: [4, 5] },
       { id: 'env', icon: '🏷️', title: 'Environmental Print', blurb: 'Read simple signs and familiar words from home.', eylfOutcomes: [2, 5] },
@@ -2920,8 +2924,22 @@
         state.rounds = pick(reviewWords.length ? reviewWords : fallback, Math.min(target, Math.max(4, reviewWords.length || 4)));
       }
 
-      goScreen('play');
-      renderRound();
+      playWithBreathing();
+    }
+
+    function playWithBreathing() {
+      const overlay = document.getElementById('breathingOverlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        setTimeout(() => {
+          overlay.style.display = 'none';
+          goScreen('play');
+          renderRound();
+        }, 2000);
+      } else {
+        goScreen('play');
+        renderRound();
+      }
     }
 
     function startDailyLesson() {
@@ -2966,8 +2984,7 @@
         { type: 'story', item: pick(STORY_ROUNDS, 1)[0] },
         { type: 'read', item: pick(TINY_SENTENCES, 1)[0] }
       ];
-      goScreen('play');
-      renderRound();
+      playWithBreathing();
     }
 
     function activeGame() {
