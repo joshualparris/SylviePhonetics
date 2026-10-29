@@ -1,6 +1,6 @@
-# Sylvie Phonics Adventure
+# Phonics Adventure
 
-Sylvie Phonics Adventure is a calm, offline-first phonics and early literacy practice app for home co-play and educator-informed practice. It is a static single-page app that can run from `index.html` without a build step.
+Phonics Adventure is a calm, offline-first phonics and early literacy practice app for home co-play and educator-informed practice. It is a static single-page app that can run from `index.html` without a build step.
 
 Repository: https://github.com/joshualparris/SylviePhonetics.git
 
@@ -22,7 +22,7 @@ See:
 
 - 28 game modes plus Today's Path.
 - Touch mode and keyboard mode.
-- Sylvie play mode and Parent assist mode.
+- Child-focused play mode and Parent assist mode.
 - Gentle/growing/brave garden levels.
 - Literacy age selector.
 - Uppercase/lowercase display settings.
